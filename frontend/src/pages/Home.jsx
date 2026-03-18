@@ -179,11 +179,11 @@ export default function Home() {
             <div className="footer-contact">
               <div className="footer-item">
                 <PhoneIcon className="footer-icon" />
-                <span>6302313370</span>
+                <span>+91 XXXXXXXXXX</span>
               </div>
               <div className="footer-item">
                 <EmailIcon className="footer-icon" />
-                <span>harsha123@gmail.com</span>
+                <span>support@gmail.com</span>
               </div>
             </div>
           </div>

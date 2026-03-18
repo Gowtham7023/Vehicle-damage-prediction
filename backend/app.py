@@ -13,6 +13,9 @@ import google.generativeai as genai
 from PIL import Image
 import io
 import base64
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 # Enable detailed logging
@@ -35,17 +38,23 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(RESULTS_FOLDER, exist_ok=True)
 
 # Configure Gemini API
-genai.configure(api_key='AIzaSyCaiCtwdbOuUrWmuR6Z_RZPSPKj4v5dHT0')
-model = genai.GenerativeModel('gemini-1.5-flash')
+api_key = os.environ.get('GEMINI_API_KEY')
+if not api_key:
+    raise ValueError("GEMINI_API_KEY environment variable is not set. Please set it in a .env file.")
+genai.configure(api_key=api_key)
+gemini_model = genai.GenerativeModel('gemini-1.5-flash')
 
 # Load YOLO model
+# Load YOLO model
 try:
-    model = YOLO('models/best.pt')
-    print("✅ YOLO model loaded")
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    model_path = os.path.join(BASE_DIR, 'models', 'best.pt')
+    
+    model = YOLO(model_path)
+    print("✅ YOLO model loaded from:", model_path)
 except Exception as e:
     print("❌ Error loading model:", e)
-    model = None  # Allow server to start even if model fails to load for debugging
-
+    model = None
 # Severity and cost mappings
 DAMAGE_SEVERITY = {
     'bonnet': {'minor': 1, 'moderate': 2, 'severe': 3},
@@ -181,7 +190,7 @@ def analyze_damage(image_path):
     """
     
     # Get response from Gemini
-    response = model.generate_content(prompt)
+    response = gemini_model.generate_content(prompt)
     
     # Process Gemini's response
     try:

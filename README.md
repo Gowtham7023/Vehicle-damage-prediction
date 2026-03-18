@@ -2,6 +2,8 @@
 
 A full-stack AI application that predicts and classifies vehicle damage severity from uploaded images using YOLOv8 and a Flask backend, with a sleek React frontend.
 
+**Author**: Gowtham7023
+
 ---
 
 ## 🔧 Tech Stack
